@@ -111,7 +111,7 @@ def main() -> None:
 
 
         walk_blob_hierarchy(cc)
-        print( cc.name )
+        print( c.name )
         print(f"Hot files : {hot_files} --> {hot_size}b")
         print(f"Cool files : {cool_files} --> {cool_size}b")
 
