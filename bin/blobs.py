@@ -13,7 +13,7 @@ from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.storage import StorageManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
-from azure.storage.blob import BlobServiceClient, ContainerClient, BlobPrefix
+from azure.storage.blob import BlobServiceClient, ContainerClient, BlobPrefix, BlobClient
 
 
 from munch import Munch, munchify
@@ -61,7 +61,10 @@ def main() -> None:
 
 #        print( cc.container_name )
 
+        BlobClient.from_blob_url()
+
 #        for blob in cc.list_blobs(include=[]):
+            
 #            pp.pprint( blob )
 #        for blob in cc.walk_blobs():
 #            print( type( blob.blob_tier. ))
@@ -85,12 +88,17 @@ def main() -> None:
                     walk_blob_hierarchy(container_client, prefix=item.name)
                     depth -= 1
                 else:
+                    bc = BlobClient(f"https://{account}.blob.core.windows.net", account, item.name)
+                    bc.create_snapshot()
+                    bc.set_standard_blob_tier('cold')
                     message = 'Blob: ' + separator * depth + short_name + f"\t{item.size}\t{item.blob_tier} {item.last_modified}"
                     results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
+                    
                     num_snapshots = len(results) - 1
                     if num_snapshots:
                         message += " ({} snapshots)".format(num_snapshots)
                     print(message)
+
         walk_blob_hierarchy(cc)
 
 
