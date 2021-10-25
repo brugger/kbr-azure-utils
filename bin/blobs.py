@@ -87,7 +87,7 @@ def main() -> None:
                     walk_blob_hierarchy(container_client, prefix=item.name)
                     depth -= 1
                 else:
-                    bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{c.name}/{item.name}", account
+                    bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{c.name}/{item.name}", account)
 #                    bc.create_snapshot()
                     bc.set_standard_blob_tier('Cold')
                     message = 'Blob: ' + separator * depth + short_name + f"\t{item.size}\t{item.blob_tier} {item.last_modified}"
