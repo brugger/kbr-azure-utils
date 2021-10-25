@@ -91,7 +91,7 @@ def main() -> None:
                     if num_snapshots:
                         message += " ({} snapshots)".format(num_snapshots)
                     print(message)
-        walk_blob_hierarchy(container_client)
+        walk_blob_hierarchy(cc)
 
 
 
