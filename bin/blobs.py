@@ -62,7 +62,7 @@ def main() -> None:
 #        print( cc.container_name )
 
         for blob in cc.list_blobs():
-            pp.pprint( blob )
+#            pp.pprint( blob )
             print(f"{blob.container}/{blob.name} {blob.last_modified} {blob.size} {blob.blob_tier} {blob.blob_tier_change_time}")
 #            sys.exit()
 #        print( c )
