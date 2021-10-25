@@ -3,6 +3,7 @@
 import argparse
 import sys
 import os
+import pprint as pp
 
 
 
@@ -56,13 +57,13 @@ def main() -> None:
     cs = connection.storage_client.blob_containers.list('for-neuro-sysmed-shared-storage', account)
     for c in cs:
         print( c.name )
-#        cc = ContainerClient.from_container_url(f"https://{account}.blob.core.windows.net/{c.name}", credential=connection.credential)
-        cc = ContainerClient.from_container_url("https://neuromics.dfs.core.windows.net/natpark/") #, credential=connection.credential
+        cc = ContainerClient.from_container_url(f"https://{account}.blob.core.windows.net/{c.name}", credential=connection.credential)
 
-        print( cc.container_name )
+#        print( cc.container_name )
 
         for blob in cc.list_blobs():
-            print( blob )
+            pp.pprint( blob )
+            print(f"{blob.container}/{blob.name} {blob.last_modified} {blob.size} {blob.blob_tier} {blob.blob_tier_change_time}")
             sys.exit()
 #        print( c )
 
