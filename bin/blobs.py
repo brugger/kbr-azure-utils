@@ -64,7 +64,7 @@ def main() -> None:
         for blob in cc.list_blobs(include=[]):
 #            pp.pprint( blob )
             if isinstance(blob, BlobPrefix):
-                print(f"{blob.container}/{blob.name}"")
+                print(f"{blob.container}/{blob.name}")
             else:
                 print(f"{blob.container}/{blob.name} {blob.last_modified} {blob.size} {blob.blob_tier} {blob.blob_tier_change_time}")
             
