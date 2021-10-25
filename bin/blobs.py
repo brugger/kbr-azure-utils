@@ -82,7 +82,7 @@ def main() -> None:
                 if isinstance(item, BlobPrefix):
                     print('Folder: ' + separator * depth + short_name)
                     depth += 1
-                    walk_blob_hierarchy(prefix=item.name)
+                    walk_blob_hierarchy(container_client, prefix=item.name)
                     depth -= 1
                 else:
                     message = 'Blob: ' + separator * depth + short_name
