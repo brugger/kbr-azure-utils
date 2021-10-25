@@ -76,13 +76,13 @@ def main() -> None:
 
         depth = 1
         separator = '   '
+        hot_size = 0
+        hot_files = 0
+        cool_size = 0
+        cool_files = 0
 
         def walk_blob_hierarchy(container_client, prefix=""):
-            nonlocal depth
-            hot_size = 0
-            hot_files = 0
-            cool_size = 0
-            cool_files = 0
+            nonlocal depth, hot_files, hot_size, cool_files, cool_size
             for item in container_client.walk_blobs(name_starts_with=prefix):
                 short_name = item.name[len(prefix):]
                 if isinstance(item, BlobPrefix):
@@ -109,10 +109,11 @@ def main() -> None:
                         message += " ({} snapshots)".format(num_snapshots)
                     print(message)
 
-            print(f"Hot files : {hot_files} --> {hot_size}b")
-            print(f"Cool files : {cool_files} --> {cool_size}b")
 
         walk_blob_hierarchy(cc)
+        print( cc.name )
+        print(f"Hot files : {hot_files} --> {hot_size}b")
+        print(f"Cool files : {cool_files} --> {cool_size}b")
 
 
 
