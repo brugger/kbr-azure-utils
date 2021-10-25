@@ -61,7 +61,6 @@ def main() -> None:
 
 #        print( cc.container_name )
 
-        BlobClient.from_blob_url()
 
 #        for blob in cc.list_blobs(include=[]):
             
