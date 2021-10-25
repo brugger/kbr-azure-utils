@@ -61,8 +61,9 @@ def main() -> None:
 
 #        print( cc.container_name )
 
-        for blob in cc.list_blobs(include=[]):
+#        for blob in cc.list_blobs(include=[]):
 #            pp.pprint( blob )
+        for blob in cc.walk_blobs():
             if isinstance(blob, BlobPrefix):
                 print(f"{blob.container}/{blob.name}")
             else:
