@@ -77,7 +77,7 @@ def main() -> None:
         depth = 1
         separator = '   '
 
-        def walk_blob_hierarchy(container_client, prefix="methylation"):
+        def walk_blob_hierarchy(container_client, prefix=""):
             nonlocal depth
             hot_size = 0
             hot_files = 0
