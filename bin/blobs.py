@@ -13,7 +13,7 @@ from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.storage import StorageManagementClient
 from azure.common.credentials import ServicePrincipalCredentials
-from azure.storage.blob import BlobServiceClient, ContainerClient
+from azure.storage.blob import BlobServiceClient, ContainerClient, BlobPrefix
 
 
 from munch import Munch, munchify
