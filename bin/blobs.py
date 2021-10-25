@@ -79,6 +79,10 @@ def main() -> None:
 
         def walk_blob_hierarchy(container_client, prefix="methylation"):
             nonlocal depth
+            hot_size = 0
+            hot_files = 0
+            cool_size = 0
+            cool_files = 0
             for item in container_client.walk_blobs(name_starts_with=prefix):
                 short_name = item.name[len(prefix):]
                 if isinstance(item, BlobPrefix):
@@ -88,8 +92,15 @@ def main() -> None:
                     depth -= 1
                 else:
                     bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{c.name}/{item.name}", credential=connection.credential)
-                    print( bc.get_blob_properties() )
-                    bc.set_standard_blob_tier("Hot")
+#                    print( bc.get_blob_properties() )
+#                    bc.set_standard_blob_tier(standard_blob_tier="Hot")
+                    if item.blob_tier == 'Cool':
+                        cool_size += item.size
+                        cool_files += 1
+                    elif item.blob_tier == 'Hot':
+                        hot_size += item.size
+                        hot_files += 1
+
                     message = 'Blob: ' + separator * depth + short_name + f"\t{item.size}\t{item.blob_tier} {item.last_modified}"
                     results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     
@@ -97,6 +108,9 @@ def main() -> None:
                     if num_snapshots:
                         message += " ({} snapshots)".format(num_snapshots)
                     print(message)
+
+            print(f"Hot files : {hot_files} --> {hot_size}b")
+            print(f"Cool files : {cool_files} --> {cool_size}b")
 
         walk_blob_hierarchy(cc)
 
