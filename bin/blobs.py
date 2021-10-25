@@ -63,12 +63,38 @@ def main() -> None:
 
 #        for blob in cc.list_blobs(include=[]):
 #            pp.pprint( blob )
-        for blob in cc.walk_blobs():
-            if isinstance(blob, BlobPrefix):
-                print(f"{blob.container}/{blob.name}")
-            else:
-                print(f"{blob.container}/{blob.name} {blob.last_modified} {blob.size} {blob.blob_tier} {blob.blob_tier_change_time}")
-            
+#        for blob in cc.walk_blobs():
+#            print( type( blob.blob_tier. ))
+#            if isinstance(blob, BlobPrefix):
+#                print(f"DIR: {blob.container}/{blob.name}/")
+#            else:
+#                print(f"{blob.container}/{blob.name} {blob.last_modified} {blob.size} {blob.blob_tier} {blob.blob_tier_change_time}")
+
+
+
+        depth = 1
+        separator = '   '
+
+        def walk_blob_hierarchy(container_client, prefix=""):
+            nonlocal depth
+            for item in container_client.walk_blobs(name_starts_with=prefix):
+                short_name = item.name[len(prefix):]
+                if isinstance(item, BlobPrefix):
+                    print('Folder: ' + separator * depth + short_name)
+                    depth += 1
+                    walk_blob_hierarchy(prefix=item.name)
+                    depth -= 1
+                else:
+                    message = 'Blob: ' + separator * depth + short_name
+                    results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
+                    num_snapshots = len(results) - 1
+                    if num_snapshots:
+                        message += " ({} snapshots)".format(num_snapshots)
+                    print(message)
+        walk_blob_hierarchy(container_client)
+
+
+
 #            sys.exit()
 #        print( c )
 
