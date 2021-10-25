@@ -75,7 +75,7 @@ def main() -> None:
         depth = 1
         separator = '   '
 
-        def walk_blob_hierarchy(container_client, prefix=""):
+        def walk_blob_hierarchy(container_client, prefix="methylation"):
             nonlocal depth
             for item in container_client.walk_blobs(name_starts_with=prefix):
                 short_name = item.name[len(prefix):]
