@@ -85,7 +85,7 @@ def main() -> None:
                     walk_blob_hierarchy(container_client, prefix=item.name)
                     depth -= 1
                 else:
-                    message = 'Blob: ' + separator * depth + short_name + f"\t{blob.size}\t{blob.blob_tier} {blob.last_modified}"
+                    message = 'Blob: ' + separator * depth + short_name + f"\t{item.size}\t{item.blob_tier} {item.last_modified}"
                     results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     num_snapshots = len(results) - 1
                     if num_snapshots:
