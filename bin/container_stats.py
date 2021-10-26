@@ -132,6 +132,12 @@ def main() -> None:
     resource_group = args.resource_group
 
     containers = connection.storage_client.blob_containers.list(resource_group, account)
+    if args.list_blobs:
+        pass
+    else:
+        print("Container       |           Hot        |         Cool")
+        print("===========================================================")
+
     for c in containers:
         if args.list_blobs:
             if args.container is not None:
@@ -141,8 +147,6 @@ def main() -> None:
                 container_list_blobs(account, c.name, args.path )
 
         else: 
-            print("Container       |           Hot        |         Cool")
-            print("=====================================================")
             if args.container is not None:
                 if c.name == args.container:
                     container_stats(account, c.name, args.path )
