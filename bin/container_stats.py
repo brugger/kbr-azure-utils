@@ -74,7 +74,7 @@ def container_stats(account:str, name:str, prefix:str="") -> None:
 
     walk_blob_hierarchy(cc, prefix)
 
-    print(f"{name:20} Hot {hot_files:5} {string_utils.readable_bytes(hot_size):5} Cool {cool_files:5} {string_utils.readable_bytes(cool_size):5} ")
+    print(f"{name:20} Hot {hot_files:5} {string_utils.readable_bytes(hot_size):>5} Cool {cool_files:5} {string_utils.readable_bytes(cool_size):>5} ")
 
 
 def container_list_blobs(account:str, name:str, prefix:str="") -> None:
@@ -99,7 +99,7 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
                 results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     
                 num_snapshots = len(results) - 1
-                print(f"{name}:{prefix}/{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
+                print(f"{name}:{prefix}{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
 
 
     walk_blob_hierarchy(cc, prefix)
