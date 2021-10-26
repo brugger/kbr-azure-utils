@@ -112,16 +112,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=f'container_stats.py: reports hot/cold files and useage in a storage account/container')
 
 
-    parser.add_argument('-a', '--account', help="Account name", required=True) 
-    parser.add_argument('-c', '--container', help="Account name") 
-    parser.add_argument('-p', '--path', help="sub-path only reporting", default=None) 
-    parser.add_argument('-r', '--resource-group', help="resource group owning the accounts", 
-                               default=args_utils.get_env_var('AZURE_RESOURCE_GROUP', None), required=True) 
-
+    parser.add_argument('-a', '--account', help="Account name", required=True)
+    parser.add_argument('-c', '--container', help="Account name")
+    parser.add_argument('-p', '--path', help="sub-path only reporting", default=None)
     parser.add_argument('-l', '--list-blobs', help="Show size/state for all blobs", default=False, action="store_true")
 
+    parser.add_argument('-r', '--resource-group', help="resource group owning the accounts", 
+                               default=args_utils.get_env_var('AZURE_RESOURCE_GROUP', None))
     parser.add_argument('-s', '--subscription-id', help="AZURE_SUBSCRIPTION id",
-                        default=args_utils.get_env_var('AZURE_SUBSCRIPTION', None), required=True) 
+                        default=args_utils.get_env_var('AZURE_SUBSCRIPTION', None))
 
 
     args = parser.parse_args()
