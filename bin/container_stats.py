@@ -74,7 +74,7 @@ def container_stats(account:str, name:str, prefix:str="") -> None:
 
     walk_blob_hierarchy(cc)
 
-    print(f"{name}: Hot: {hot_files} {string_utils.readable_bytes(hot_size)} Cool: {cool_files} {string_utils.readable_bytes(cool_size)} ")
+    print(f"{name:20}: Hot {hot_files:5} {string_utils.readable_bytes(hot_size)} Cool {cool_files:5} {string_utils.readable_bytes(cool_size)} ")
 
 
 def container_list_blobs(account:str, name:str, prefix:str="") -> None:
