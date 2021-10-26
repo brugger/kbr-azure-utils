@@ -73,7 +73,6 @@ def container_stats(account:str, name:str, prefix:str="") -> None:
 
 
         walk_blob_hierarchy(cc)
-        print(  )
 
         print(f"{name}: Hot: {hot_files} {string_utils.readable_bytes(hot_size)} Cool: {cool_files} {string_utils.readable_bytes(cool_size)} ")
 
@@ -90,16 +89,16 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
         for item in container_client.walk_blobs(name_starts_with=prefix):
             short_name = item.name[len(prefix):]
             if isinstance(item, BlobPrefix):
-                print(f"{item.name}/")
+                print(f"{item.name}")
             else:
-                bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{c.name}/{item.name}", credential=connection.credential)
+#                bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{c.name}/{item.name}", credential=connection.credential)
 #                print( bc.get_blob_properties() )
 #                bc.set_standard_blob_tier(standard_blob_tier="Hot")
 
                 results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     
                 num_snapshots = len(results) - 1
-                print(f"{prefix}/{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
+                print(f"{name}/{prefix}/{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
 
 
     walk_blob_hierarchy(cc)
