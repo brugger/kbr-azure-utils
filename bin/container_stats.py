@@ -74,8 +74,6 @@ def container_stats(account:str, name:str, prefix:str="") -> None:
 
     walk_blob_hierarchy(cc, prefix)
 
-    print("Container       |           Hot        |         Cool")
-    print("=====================================================")
 
     print(f"{name:20} {hot_files:5} {string_utils.readable_bytes(hot_size):>10}    {cool_files:5} {string_utils.readable_bytes(cool_size):>10}")
 
@@ -143,6 +141,8 @@ def main() -> None:
                 container_list_blobs(account, c.name, args.path )
 
         else: 
+            print("Container       |           Hot        |         Cool")
+            print("=====================================================")
             if args.container is not None:
                 if c.name == args.container:
                     container_stats(account, c.name, args.path )
