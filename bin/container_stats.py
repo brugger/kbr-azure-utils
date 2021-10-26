@@ -20,13 +20,9 @@ from munch import Munch, munchify
 
 
 
-import kbr.config_utils as config_utils
-import kbr.log_utils as logger
-import kbr.version_utils as version_utils
 import kbr.args_utils as args_utils
 import kbr.string_utils as string_utils
-import kbr.file_utils as file_utils
-import kbr.type_utils as type_utils
+import kbr.datetime_utils as datetime_utils
 
 sys.path.append(".")
 
@@ -99,7 +95,7 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
                 results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     
                 num_snapshots = len(results) - 1
-                print(f"{name}:{prefix}{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
+                print(f"{name}:{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {datetime_utils.as_string(item.last_modified)} SNAPS:{num_snapshots}")
 
 
     walk_blob_hierarchy(cc, prefix)
