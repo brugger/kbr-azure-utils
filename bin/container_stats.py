@@ -88,7 +88,6 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
     def walk_blob_hierarchy(container_client, prefix=""):
         nonlocal depth
         for item in container_client.walk_blobs(name_starts_with=prefix):
-            short_name = item.name[len(prefix):]
             if isinstance(item, BlobPrefix):
                 print(f"{name}:{item.name}")
                 walk_blob_hierarchy(container_client, prefix=item.name)
