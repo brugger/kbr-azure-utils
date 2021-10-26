@@ -95,7 +95,7 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
                 results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     
                 num_snapshots = len(results) - 1
-                print(f"{name}:{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {datetime_utils.as_string(item.last_modified)} SNAPS:{num_snapshots}")
+                print(f"{name}:{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {datetime_utils.to_string(item.last_modified)} SNAPS:{num_snapshots}")
 
 
     walk_blob_hierarchy(cc, prefix)
