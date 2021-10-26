@@ -46,35 +46,35 @@ def connect(Subscription_Id:str) -> None:
 
 def container_stats(account:str, name:str, prefix:str="") -> None:
 
-        cc = ContainerClient.from_container_url(f"https://{account}.blob.core.windows.net/{name}", credential=connection.credential)
+    cc = ContainerClient.from_container_url(f"https://{account}.blob.core.windows.net/{name}", credential=connection.credential)
 
-        hot_size   = 0
-        hot_files  = 0
-        cool_size  = 0
-        cool_files = 0
-        snapshots  = 0
+    hot_size   = 0
+    hot_files  = 0
+    cool_size  = 0
+    cool_files = 0
+    snapshots  = 0
 
-        def walk_blob_hierarchy(container_client, prefix=""):
-            nonlocal hot_files, hot_size, cool_files, cool_size, snapshots
-            for blob in container_client.walk_blobs(name_starts_with=prefix):
-                if isinstance(blob, BlobPrefix):
-                    pass
-                else:
-                    bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{name}/{blob.name}", credential=connection.credential)
-                    if blob.blob_tier == 'Cool':
-                        cool_size += blob.size
-                        cool_files += 1
-                    elif blob.blob_tier == 'Hot':
-                        hot_size += blob.size
-                        hot_files += 1
+    def walk_blob_hierarchy(container_client, prefix=""):
+        nonlocal hot_files, hot_size, cool_files, cool_size, snapshots
+        for blob in container_client.walk_blobs(name_starts_with=prefix):
+            if isinstance(blob, BlobPrefix):
+                walk_blob_hierarchy(container_client, prefix=blob.name)
+            else:
+                bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{name}/{blob.name}", credential=connection.credential)
+                if blob.blob_tier == 'Cool':
+                    cool_size += blob.size
+                    cool_files += 1
+                elif blob.blob_tier == 'Hot':
+                    hot_size += blob.size
+                    hot_files += 1
 
-                    results = list(container_client.list_blobs(name_starts_with=blob.name, include=['snapshots']))                    
-                    snapshots += len(results) - 1
+                results = list(container_client.list_blobs(name_starts_with=blob.name, include=['snapshots']))                    
+                snapshots += len(results) - 1
 
 
-        walk_blob_hierarchy(cc)
+    walk_blob_hierarchy(cc)
 
-        print(f"{name}: Hot: {hot_files} {string_utils.readable_bytes(hot_size)} Cool: {cool_files} {string_utils.readable_bytes(cool_size)} ")
+    print(f"{name}: Hot: {hot_files} {string_utils.readable_bytes(hot_size)} Cool: {cool_files} {string_utils.readable_bytes(cool_size)} ")
 
 
 def container_list_blobs(account:str, name:str, prefix:str="") -> None:
@@ -89,7 +89,8 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
         for item in container_client.walk_blobs(name_starts_with=prefix):
             short_name = item.name[len(prefix):]
             if isinstance(item, BlobPrefix):
-                print(f"{item.name}")
+                print(f"{name}:{item.name}")
+                walk_blob_hierarchy(container_client, prefix=item.name)
             else:
 #                bc = BlobClient.from_blob_url(f"https://{account}.blob.core.windows.net/{c.name}/{item.name}", credential=connection.credential)
 #                print( bc.get_blob_properties() )
@@ -98,7 +99,7 @@ def container_list_blobs(account:str, name:str, prefix:str="") -> None:
                 results = list(container_client.list_blobs(name_starts_with=item.name, include=['snapshots']))
                     
                 num_snapshots = len(results) - 1
-                print(f"{name}/{prefix}/{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
+                print(f"{name}:{prefix}/{item.name} \t{string_utils.readable_bytes(item.size)}\t{item.blob_tier} {item.last_modified} {num_snapshots}")
 
 
     walk_blob_hierarchy(cc)
