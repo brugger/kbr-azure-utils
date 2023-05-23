@@ -19,6 +19,8 @@ from azure.storage.blob import BlobServiceClient, ContainerClient, BlobPrefix, B
 from munch import Munch, munchify
 
 
+import tabulate
+
 
 import kbr.args_utils as args_utils
 import kbr.string_utils as string_utils
@@ -52,6 +54,7 @@ def container_stats(account:str, name:str, prefix:str="") -> None:
 
     def walk_blob_hierarchy(container_client, prefix=""):
         nonlocal hot_files, hot_size, cool_files, cool_size, snapshots
+#        print( f"Prefix: {prefix}")
         for blob in container_client.walk_blobs(name_starts_with=prefix):
             if isinstance(blob, BlobPrefix):
                 walk_blob_hierarchy(container_client, prefix=blob.name)
@@ -105,7 +108,7 @@ def main() -> None:
 
 
 
-    parser = argparse.ArgumentParser(description=f'container_stats.py: reports hot/cold files and useage in a storage account/container')
+    parser = argparse.ArgumentParser(description=f'container_stats.py: reports hot/cold files and usage in a storage account/container')
 
 
     parser.add_argument('-a', '--account', help="Account name", required=True)
@@ -126,6 +129,8 @@ def main() -> None:
     account = args.account
     resource_group = args.resource_group
 
+    res = []
+
     containers = connection.storage_client.blob_containers.list(resource_group, account)
     if args.list_blobs:
         pass
@@ -134,6 +139,7 @@ def main() -> None:
         print("===========================================================")
 
     for c in containers:
+        print( c.name )
         if args.list_blobs:
             if args.container is not None:
                 if c.name == args.container:

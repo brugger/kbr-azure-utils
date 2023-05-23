@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import os
+
+from tabulate import tabulate
+
+import kbr.config_utils as config_utils
+import kbr.args_utils as args_utils
+import kbr.version_utils as version_utils
+import kbr.log_utils as logger
+
+import k.azure_utils as azure_utils
+
+
+
+
+def main():
+    parser = argparse.ArgumentParser(description="azure-utils (version: {version})".format(version=version))
+    commands = {'a':'add', 'l': 'list', 'd': 'delete', 'u': 'utils', 'h':'help'}
+    parser.add_argument('command', nargs='+', help="{}".format(",".join(commands.values())))
+
+    args = parser.parse_args()
+    # hardcoded for now.
+
+    command = args.command.pop(0)
+    if command in commands:
+        command = commands[ command ]
+
+    if command == 'init':
+        init_cmds( args )
+    elif command == 'version':
+        version_command(args)
+    elif command == 'git':
+        git_command(args)
+    #    elif command == 'release':
+    #        release_command(args)
+    elif command == 'utils':
+        utils_cmds(args)
+    else:
+        if command != 'help':
+            print(f"Unknown command: {command}.")
+
+        parser.print_help()
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
